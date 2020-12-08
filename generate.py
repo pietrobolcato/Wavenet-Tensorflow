@@ -39,7 +39,7 @@ def get_arguments():
 
     parser = argparse.ArgumentParser(description='WaveNet generation script')
     parser.add_argument(
-        'checkpoint', type=str, help='Which model checkpoint to generate from')
+        '--checkpoint', type=str, help='Which model checkpoint to generate from')
     parser.add_argument(
         '--seconds',
         type=int,
