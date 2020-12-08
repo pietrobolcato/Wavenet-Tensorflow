@@ -12,6 +12,8 @@ import tensorflow as tf
 
 from wavenet import WaveNetModel, mu_law_decode, mu_law_encode, audio_reader
 
+from tqdm import tqdm
+
 SAMPLES = 16000
 TEMPERATURE = 1.0
 LOGDIR = './logdir'
@@ -206,7 +208,7 @@ def main():
         print('Done.')
 
     last_sample_timestamp = datetime.now()
-    for step in range(args.samples):
+    for step in tqdm(range(args.samples)):
         if args.fast_generation:
             outputs = [next_sample]
             outputs.extend(net.push_ops)
@@ -241,14 +243,6 @@ def main():
             np.arange(quantization_channels), p=scaled_prediction)
         waveform.append(sample)
 
-        # Show progress only once per second.
-        current_sample_timestamp = datetime.now()
-        time_since_print = current_sample_timestamp - last_sample_timestamp
-        if time_since_print.total_seconds() > 1.:
-            print('Sample {:3<d}/{:3<d}'.format(step + 1, args.samples),
-                  end='\r')
-            last_sample_timestamp = current_sample_timestamp
-
         # If we have partial writing, save the result so far.
         if (args.wav_out_path and args.save_every and
                 (step + 1) % args.save_every == 0):
@@ -256,7 +250,7 @@ def main():
             write_wav(out, wavenet_params['sample_rate'], args.wav_out_path)
 
     # Introduce a newline to clear the carriage return from the progress.
-    print()
+    print() 
 
     # Save the result as an audio summary.
     datestring = str(datetime.now()).replace(' ', 'T')
