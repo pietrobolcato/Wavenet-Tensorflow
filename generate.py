@@ -208,8 +208,8 @@ def main():
         print('Done.')
 
     last_sample_timestamp = datetime.now()
-    print("Number of samples to generate: ", (args.samples * wavenet_params['sample_rate']))
-    for step in tqdm(range(args.samples * wavenet_params['sample_rate'])):
+    print("Number of samples to generate: ", (args.seconds * wavenet_params['sample_rate']))
+    for step in tqdm(range(args.seconds * wavenet_params['sample_rate'])):
         if args.fast_generation:
             outputs = [next_sample]
             outputs.extend(net.push_ops)
