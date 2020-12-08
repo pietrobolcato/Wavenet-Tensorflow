@@ -41,10 +41,10 @@ def get_arguments():
     parser.add_argument(
         'checkpoint', type=str, help='Which model checkpoint to generate from')
     parser.add_argument(
-        '--samples',
+        '--seconds',
         type=int,
-        default=SAMPLES,
-        help='How many waveform samples to generate')
+        default=SECONDS,
+        help='How many waveform seconds to generate')
     parser.add_argument(
         '--temperature',
         type=_ensure_positive_float,
@@ -208,7 +208,8 @@ def main():
         print('Done.')
 
     last_sample_timestamp = datetime.now()
-    for step in tqdm(range(args.samples)):
+    print("Number of samples to generate: ", (args.samples * wavenet_params['sample_rate']))
+    for step in tqdm(range(args.samples * wavenet_params['sample_rate'])):
         if args.fast_generation:
             outputs = [next_sample]
             outputs.extend(net.push_ops)
